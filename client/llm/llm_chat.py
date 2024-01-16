@@ -16,7 +16,7 @@ class Chat(LLM):
     def _construct_query(self, prompt: str, **kwargs) -> Dict:
         """构造请求体
         """
-        query_info = {}
+        query_info = dict()
         query_info['human_input'] = prompt
         query_info['token'] = User().token
         if kwargs is not None and 'task' in kwargs:
@@ -55,8 +55,11 @@ class Chat(LLM):
             resp = self._post(url=self.url, query=query)
             if resp.status_code == 200:
                 resp_json = resp.json()
-                predictions = resp_json["response"]
-                return predictions
+                if resp_json['code'] == 200:
+                    res = resp_json['data']
+                else:
+                    res = resp_json['msg']
+                return res
             else:
                 return f'请求失败:\n{self.url}'
         except Exception as e:
