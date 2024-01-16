@@ -1,0 +1,24 @@
+
+# llms
+model_base_dir: /mnt/workspace/LLM
+
+# 需要使用到的模型
+llms_load: ['chatglm3-6b']
+
+# 当前支持llms的配置信息
+llms: {
+  chatglm3-6b: { 
+    name: chatglm3-6b,
+    model_dir: default,
+    repo_id: THUDM/chatglm3-6b,
+    host: 127.0.0.1,
+    port: 8501
+  },
+}
+
+
+# embedding
+
+
+
+
