@@ -5,6 +5,8 @@ from llm.chatglm3.llm_chatglm3 import ChatGLM3
 
 def handle_demo_task(query, uid):
     llm = ChatGLM3()
+
+    # TODO 处理具体的业务逻辑
     intention = ['企业查询', '政策查询', '通用', '其他']
 
     template = """以下用三个反引号分隔的问题的分类文本是什么？
@@ -18,21 +20,22 @@ def handle_demo_task(query, uid):
 
     llm_chain = LLMChain(prompt=prompt, llm=llm)
     cnt = 0
+    data = '其他'
     while True:
         cnt += 1
         question = query
         if question.strip() == "stop":
             break
         response = llm_chain.invoke(question)
-        response['text'].replace('「', '').replace('」','')
         print("\nChatGLM：", response['text'])
         if response['text'] not in intention:
             for i in range(10):
                 response = llm_chain.invoke(question)
-                print(f"\n第{i+1}次， ChatGLM：", response['text'])
-                if response['text'].replace('「', '').replace('」','').replace('。','')  in intention:
+                print(f"\n第{i + 1}次， ChatGLM：", response['text'])
+                if response['text'].replace('「', '').replace('」', '').replace('。', '') in intention:
+                    data = response['text'].replace('「', '').replace('」', '').replace('。', '')
                     break
         if cnt > 10:
             break
     print('')
-    return {}
+    return data
