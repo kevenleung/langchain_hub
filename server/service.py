@@ -2,7 +2,7 @@
 import json
 from flask import Flask, request
 from task.task import handle_task
-from account.token import verify_token
+from server.account.token import verify_token
 from configs.server_info import tasks
 from configs.server_info import ServerConfig
 
@@ -31,9 +31,13 @@ def robot():
     task = data_dict.get('task', None)
     if task not in tasks:
         task = tasks[0]
-    res = handle_task(query=query, uid=uid, task=task)
-    if res is None:
-        res = {}
+    data = handle_task(query=query, uid=uid, task=task)
+    if data is None:
+        res = {'data': '', 'code': 600, 'msg': '系统异常 600'}
+    else:
+        res = {'data': data, 'code': 200, 'msg': 'ok'}
+
+    res = json.dumps(res, ensure_ascii=False)
     return res
 
 
